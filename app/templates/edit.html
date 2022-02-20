@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Опять редактировать?</title>
+</head>
+<body class="container">
+    <form method="POST">
+        {% csrf_token %}
+        <p>
+            <label>Введите модель машины</label><br>
+            <input type="text" name="model" value="{{car.model}}" />
+        </p>
+        <p>
+            <label>Введите скорость</label><br>
+            <input type="number" name="speed" value="{{car.speed}}">
+        </p>
+        <p>
+            <label>Выберите цвет</label><br>
+            <input type="color" name="color" value="{{car.color}}" />
+        </p>
+        <input type="submit" value="Сохранить" >
+    </form>
+</body>
+</html>
