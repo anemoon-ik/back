@@ -15,6 +15,9 @@ def cars_id(cars: List, model: str, speed: int, color: str) -> Optional[int]:
                 return car.id
         return None
 
+def compare_cars(car_one, car_two) -> bool:
+    return car_one['model'] == car_two.model and car_one["speed"] == car_two.speed and car_one["color"] == car_two
+
 
 class TestCars(TestCase):
     def setUp(self):
@@ -80,5 +83,3 @@ class TestCars(TestCase):
             speed=200,
             color="green"
         ) == 0
-
-        

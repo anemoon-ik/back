@@ -20,24 +20,20 @@ def delete(request: HttpRequest, id_: str) -> HttpResponse:
 
 def add_car(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
-        Car.objects.create(
-            model=request.POST.get("model", ""),
-            speed=int(request.POST.get("speed", "")),
-            color=request.POST.get("color", ""),
-        )
+        if request.POST.get("id_", "") == "":
+            Car.objects.create(
+                model=request.POST.get("model", ""),
+                speed=int(request.POST.get("speed", "")),
+                color=request.POST.get("color", ""),
+            )
+        else:
+            car = Car.objects.get(pk=int(request.POST.get("id_", "")))
+            car.model = request.POST.get("model", "")
+            car.speed = int(request.POST.get("speed", ""))
+            car.color = request.POST.get("color", "")
+            car.save()
     return redirect("/")
 
-def edit(request: HttpRequest, id_:str) -> HttpResponse:
-    try:
-        car = Car.objects.get(id=id_)
 
-        if request.method == "POST":
-            car.model=request.POST.get("model", "")
-            car.speed=int(request.POST.get("speed", ""))
-            car.color=request.POST.get("color", "")
-            car.save()
-            return redirect("/")
-        else:
-            return render(request, "edit.html", {"car": car})
-    except Car.DoesNotExist:
-        return HttpResponseNotFound("<h3>Car is not found</h3>")
+def car_trips(request: HttpRequest, id_: int) -> HttpResponse:
+    return HttpResponse(f"Here is a car with id {id_}")
