@@ -1,14 +1,21 @@
+from datetime import datetime
 from django.http import HttpRequest, HttpResponse, HttpResponseNotFound 
 from django.shortcuts import render, redirect  
 from django.contrib.auth.models import User  
 
-from app.models import Car
+from app.models import Car, Trip
 
 
 def index(request: HttpRequest) -> HttpResponse:
     catalog = Car.objects.all()
     return render(request, "index.html", context={
         "cars": catalog
+    })
+
+def trips(request: HttpRequest) -> HttpResponse:
+    catalog1 = Trip.objects.all()
+    return render(request, "trips.html", context={
+        "trips": catalog1
     })
 
 
@@ -35,5 +42,21 @@ def add_car(request: HttpRequest) -> HttpResponse:
     return redirect("/")
 
 
+def add_trip(request: HttpRequest) -> HttpResponse:
+    if request.method == "POST":
+        if request.POST.get("id_", "") == "":
+            Trip.objects.create(
+                date=request.POST.get("date", ""),
+                km=request.POST.get("km", ""),
+            )
+        else:
+            trip = Trip.objects.get(pk=int(request.POST.get("id_", "")))
+            trip.date = request.POST.get("date", "")
+            trip.km = request.POST.get("km", "")
+            trip.save()
+    return redirect("/")
+
+
+
 def car_trips(request: HttpRequest, id_: int) -> HttpResponse:
-    return HttpResponse(f"Here is a car with id {id_}")
+    return render(request, "trips.html", {"trips": trips})
