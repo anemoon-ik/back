@@ -1,7 +1,9 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
 class Car(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     model = models.CharField(max_length=1000, default="")
     speed = models.IntegerField(default=-1)
     color = models.CharField(max_length=1000, default="red")
@@ -23,3 +25,10 @@ class Trip(models.Model):
 
     def __str__(self):
         return f"{self.car}: {self.date}, {self.km} km"
+
+class Teleuser(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    char_id = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.user}: {self.char_id}"
